@@ -65,7 +65,9 @@ async function processQueue() {
 				}, { responseType: 'arraybuffer' });
 
 				const musicFile = response.data;
-				const attachment = new AttachmentBuilder(musicFile, { name: 'music.ogg' });
+				// replace prompt spaces with underscores
+				const filename = prompt.replace(/ /g, '_') + '.ogg';
+				const attachment = new AttachmentBuilder(musicFile, { name: filename });
 				
 				await channel.send({
 					content: `Hey <@${user.id}>, your music is ready!`,
