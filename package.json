@@ -1,0 +1,24 @@
+{
+  "name": "utabot",
+  "version": "1.0.0",
+  "description": "Discord bot for generating AI music",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Schneewolf-Labs/UtaBot.git"
+  },
+  "author": "Schneewolf Labs",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Schneewolf-Labs/UtaBot/issues"
+  },
+  "homepage": "https://github.com/Schneewolf-Labs/UtaBot#readme",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1"
+  }
+}
