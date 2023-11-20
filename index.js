@@ -60,7 +60,8 @@ async function processQueue() {
 
 			try {
 				const response = await axios.post(apiEndpoint, {
-					prompt: prompt
+					prompt: prompt,
+					duration: 30
 				}, { responseType: 'arraybuffer' });
 
 				const musicFile = response.data;
