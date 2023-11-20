@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits, MessageAttachment, REST, Routes } = require('discord.js');
+const { Client, GatewayIntentBits, AttachmentBuilder, REST, Routes } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const axios = require('axios');
 
@@ -64,7 +64,7 @@ async function processQueue() {
 				}, { responseType: 'arraybuffer' });
 
 				const musicFile = response.data;
-				const attachment = new MessageAttachment(musicFile, 'music.ogg');
+				const attachment = new AttachmentBuilder(musicFile, { name: 'music.ogg' });
 				
 				await channel.send({
 					content: `Hey <@${user.id}>, your music is ready!`,
