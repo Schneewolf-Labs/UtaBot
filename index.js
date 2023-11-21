@@ -18,6 +18,7 @@ client.once('ready', async () => {
 					.setName('generate')
 					.setDescription('Generate music from a prompt')
 					.addStringOption(option => option.setName('prompt').setDescription('The prompt for the music').setRequired(true))
+					.addIntegerOption(option => option.setName('duration').setDescription('The duration of the music in seconds').setRequired(false)),
 		].map(command => command.toJSON());
 
 		const rest = new REST().setToken(token);
@@ -45,8 +46,9 @@ client.on('interactionCreate', async interaction => {
 
     if (commandName === 'generate') {
         const prompt = options.getString('prompt');
+				const duration = Math.min(300, options.getInteger('duration') || 90);
 				console.log(`Received prompt: ${prompt}`);
-				queue.push({ prompt: prompt, interaction: interaction });
+				queue.push({ prompt: prompt, duration: duration, interaction: interaction });
 				await interaction.reply({ content: `Your prompt \`${prompt}\` has been added to the queue. I'll notify you when it's ready!` });
     }
 });
@@ -54,14 +56,14 @@ client.on('interactionCreate', async interaction => {
 async function processQueue() {
 	while(true) {
 		if (queue.length > 0) {
-			const { prompt, interaction } = queue.shift();
+			const { prompt, duration, interaction } = queue.shift();
 			const channel = interaction.channel;
 			const user = interaction.user;
 
 			try {
 				const response = await axios.post(apiEndpoint, {
 					prompt: prompt,
-					duration: 30
+					duration: duration
 				}, { responseType: 'arraybuffer' });
 
 				const musicFile = response.data;
