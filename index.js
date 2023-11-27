@@ -68,7 +68,10 @@ client.on('interactionCreate', async interaction => {
 		};
 		console.log(`Received prompt: ${prompt}`);
 		queue.push({ prompt: prompt, params: params, interaction: interaction });
-		await interaction.reply({ content: `Your prompt \`${prompt}\` has been added to the queue. I'll notify you when it's ready!` });
+		const queueLength = queue.length;
+		await interaction.reply({ 
+			content: `Your prompt \`${prompt}\` has been added to the queue(\`${queueLength}\`).\nI'll notify you when it's ready!`
+		});
 	}
 });
 
