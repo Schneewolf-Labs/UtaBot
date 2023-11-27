@@ -67,10 +67,12 @@ client.on('interactionCreate', async interaction => {
 			extend_stride: options.getInteger('extend_stride')
 		};
 		console.log(`Received prompt: ${prompt}`);
+		const queueLen = queue.length;
+		const queueMessage = queueLen === 0 ? `I'll get started on your prompt \`${prompt}\` right away.` : `Your prompt \`${prompt}\` has been enqueued! There are ${queueLen} prompt(s) ahead of you.`;
 		queue.push({ prompt: prompt, params: params, interaction: interaction });
-		const queueLength = queue.length;
+		const replyMessage = `Got it! ${queueMessage}\nI'll notify you when it's ready!`;
 		await interaction.reply({ 
-			content: `Your prompt \`${prompt}\` has been added to the queue(\`${queueLength}\`).\nI'll notify you when it's ready!`
+			content: replyMessage
 		});
 	}
 });
