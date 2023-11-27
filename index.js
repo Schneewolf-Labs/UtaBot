@@ -8,6 +8,7 @@ const token = process.env.DISCORD_BOT_TOKEN;
 const apiEndpoint = 'http://127.0.0.1:5002/generate';
 
 let queue = [];
+let processing = false;
 
 client.once('ready', async () => {
 	console.log(`Logged in as ${client.user.tag}!`);
@@ -68,7 +69,7 @@ client.on('interactionCreate', async interaction => {
 		};
 		console.log(`Received prompt: ${prompt}`);
 		const queueLen = queue.length;
-		const queueMessage = queueLen === 0 ? `I'll get started on your prompt \`${prompt}\` right away.` : `Your prompt \`${prompt}\` has been enqueued! There are ${queueLen} prompt(s) ahead of you.`;
+		const queueMessage = queueLen === 0 && !processing ? `I'll get started on your prompt \`${prompt}\` right away.` : `Your prompt \`${prompt}\` has been enqueued! You are #${queueLen+1} in line.`;
 		queue.push({ prompt: prompt, params: params, interaction: interaction });
 		const replyMessage = `Got it! ${queueMessage}\nI'll notify you when it's ready!`;
 		await interaction.reply({ 
@@ -83,6 +84,7 @@ async function processQueue() {
 			const { prompt, params, interaction } = queue.shift();
 			const channel = interaction.channel;
 			const user = interaction.user;
+			processing = true;
 
 			try {
 				const response = await axios.post(apiEndpoint, {
@@ -108,6 +110,8 @@ async function processQueue() {
 				console.error(error);
 				await channel.send(`<@${user.id}>, something went wrong while generating your music. Please try again later.`);
 			}
+		} else {
+			processing = false;
 		}
 		await new Promise(resolve => setTimeout(resolve, 1000));
 	}
